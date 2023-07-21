@@ -13,6 +13,7 @@ import { Provider as AuthProvider } from './src/context/AuthContext';
 import { setNavigator } from './src/navigationRef';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {Provider as LocationProvider} from './src/context/LocationContext';
 
 
 
@@ -22,15 +23,19 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 export default function App() {
   return (
+  <LocationProvider>
     <AuthProvider>
       <NavigationContainer ref={(navigator) => { setNavigator(navigator) }}>
         <Stack.Navigator initialRouteName="ResolveAuth" headerMode="none">
           <Stack.Screen name="ResolveAuth" component={ResolveAuthScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
+          <Stack.Screen name="TrackList" component={TrackListStack} />
           <Stack.Screen name="Main" component={MainTabNavigator} />
+       
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
+  </LocationProvider>
   );
 }
 
@@ -44,9 +49,20 @@ const AuthNavigator = () => (
 
 const MainTabNavigator = () => (
   <Tab.Navigator>
-    <Tab.Screen name="TrackList" component={TrackListScreen} options={{ tabBarIcon : () => null,tabBarLabelStyle: { fontSize: 18 } ,headerShown: false }} />
-    <Tab.Screen name="TrackDetail" component={TrackDetailScreen}  options={{ tabBarIcon : () => null ,tabBarLabelStyle : { fontSize: 18 } ,headerShown: false }} />
-    <Tab.Screen name="Account" component={AccountScreen} options={{ tabBarIcon : () => null , tabBarLabelStyle : { fontSize: 18 } ,headerShown: false }} />
+    <Tab.Screen name="TrackList" component={TrackListStack}  options={{ tabBarIcon : () => null , tabBarLabelStyle : { fontSize: 18 } ,headerShown: false }} />
+    <Tab.Screen name="TrackCreate" component={TrackCreateScreen}  options={{ tabBarIcon : () => null , tabBarLabelStyle : { fontSize: 18 } ,headerShown: false }} />
+    <Tab.Screen name="Account" component={AccountScreen}  options={{ tabBarIcon : () => null , tabBarLabelStyle : { fontSize: 18 } ,headerShown: false }} />
+    
 
   </Tab.Navigator>
 );
+
+ const TrackListStack = () => (
+    <Stack.Navigator initialRouteName="TrackList" headerMode="none">
+      <Stack.Screen name="TrackList" component={TrackListScreen}  options={{ tabBarIcon : () => null , tabBarLabelStyle : { fontSize: 18 } ,headerShown: false }} />
+      <Stack.Screen name="TrackDetail" component={TrackDetailScreen}  options={{ tabBarIcon : () => null , tabBarLabelStyle : { fontSize: 18 } ,headerShown: false }} />
+    </Stack.Navigator>
+  );
+
+
+
